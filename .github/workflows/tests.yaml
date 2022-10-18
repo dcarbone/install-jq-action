@@ -1,0 +1,145 @@
+name: 'Tests - Setup jq Action'
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'action.yaml'
+      - '.github/workflows/tests.yaml'
+      - 'scripts/unixish.sh'
+      - 'scripts/windowsish.ps1'
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-linux:
+    strategy:
+      matrix:
+        image:
+          - "ubuntu-latest"
+          - "ubuntu-20.04"
+          - "ubuntu-22.04"
+          - "macos-latest"
+          - "macos-11"
+          - "macos-12"
+          - "windows-latest"
+          - "windows-2022"
+          - "windows-2019"
+        download-compressed:
+          - 'true'
+          - 'false'
+        force:
+          - 'true'
+          - 'false'
+    name: "Test Action - (img: ${{ matrix.image }}; dlcmp: ${{ matrix.download-compressed }}; force: ${{ matrix.force }})"
+    runs-on: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v3.1.0
+
+      - name: Setup jq
+        id: install-jq
+        uses: dcarbone/install-jq-action@main
+        with:
+          force: '${{ matrix.force }}'
+          download-compressed: '${{ matrix.download-compressed }}'
+
+      - name: Check jq - Unix-ish
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        run: |
+          which jq
+          jq --version
+
+      - name: Check Outputs - Unix-ish
+        if: runner.os == 'Linux' || runner.os == 'macOS'
+        shell: bash -e {0}
+        run: |
+          _installed='${{ steps.install-jq.outputs.installed }}'
+          _err=
+          if [[ '${{ matrix.force }}' == 'true' ]]; then
+            # enabling "force" must result in an install
+            if [[ '${{ steps.install-jq.outputs.installed }}' != 'true' ]]; then
+              echo 'Unexpected value for "installed":'
+              echo 'Expected:   "true"'
+              echo 'Actual:     "${{ steps.install-jq.outputs.installed }}"'
+              _err=1
+            fi
+          else
+            if [[ '${{ steps.install-jq.outputs.found }}' == 'true' ]]; then
+              # if found, must not be installed without force
+              if [[ '${{ steps.install-jq.outputs.installed }}' != 'false' ]]; then
+                echo 'Unexpected value for "installed":'
+                echo 'Expected:   "false"'
+                echo 'Actual:     "${{ steps.install-jq.outputs.installed }}"'
+                _err=1
+              fi
+            else
+              # if not found, must be installed
+              if [[ '${{ steps.install-jq.outputs.installed }}' != 'true' ]]; then
+                echo 'Unexpected value for "installed":'
+                echo 'Expected:   "true"'
+                echo 'Actual:     "${{ steps.install-jq.outputs.installed }}"'
+                _err=1
+              fi
+            fi
+          fi
+          if [ -n "${_err}" ]; then exit 1; fi;
+          
+
+      - name: Check jq - Windows-ish
+        if: runner.os == 'Windows'
+        run: |
+          Get-Command "jq.exe"
+          jq.exe --version
+
+      - name: Check Outputs - Windows-ish
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Set-StrictMode -Version Latest
+          $_installed='${{ steps.install-jq.outputs.installed }}'
+          $_err = 0
+          if ("${{ matrix.force }}" -eq "true")
+          {
+              # enabling "force" must result in an install
+              if ("${{ steps.install-jq.outputs.installed }}" -ne "true")
+              {
+                  Write-Host "Unexpected value for installed"
+                  Write-Host "Expected:   true"
+                  Write-Host "Actual:     ${{ steps.install-jq.outputs.installed }}"
+                  $_err=1
+              }
+          }
+          else
+          {
+              if ("${{ steps.install-jq.outputs.found }}" -eq "true")
+              {
+                  # if found, must not be installed without force
+                  if ("${{ steps.install-jq.outputs.installed }}" -ne "false")
+                  {
+                      Write-Host "Unexpected value for installed"
+                      Write-Host "Expected:  false"
+                      Write-Host "Actual:    ${{ steps.install-jq.outputs.installed }}"
+                      $_err=1
+                  }
+              }
+              else
+              {
+                  # if not found, must be installed
+                  if ("${{ steps.install-jq.outputs.installed }}" -ne "true") {
+                      Write-Host "Unexpected value for installed"
+                      Write-Host "Expected:  true"
+                      Write-Host "Actual:    ${{ steps.install-jq.outputs.installed }}"
+                      $_err=1
+                  }
+              }
+          }
+          if ("${_err}" -ne 0)
+          {
+              exit 1
+          }

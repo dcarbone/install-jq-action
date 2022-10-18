@@ -1,0 +1,69 @@
+name: Install jq
+description: |
+  Installs a version of jq into the job tool cache using simple shell scripts
+
+branding:
+  icon: copy
+  color: orange
+
+inputs:
+  version:
+    required: false
+    description: "Version of jq to install"
+    default: "1.6"
+  force:
+    required: false
+    description: "If 'true', does not check for existing jq installation before continuing."
+    default: 'false'
+
+outputs:
+  found:
+    description: "If 'true', jq was already found on this runner"
+    value: "${{ steps.jq-check-unix.outputs.found == 'true' || steps.jq-check-windows.outputs.found == 'true' }}"
+  installed:
+    description: "If 'true', jq was installed by this action"
+    value: "${{ inputs.force == 'true' || steps.jq-check-unix.outputs.found == 'false' || steps.jq-check-windows.outputs.found == 'false' }}"
+
+runs:
+  using: composite
+  steps:
+    - name: 'Check for jq - Unix-ish'
+      id: jq-check-unix
+      if: (runner.os == 'Linux' || runner.os == 'macOS')
+      shell: bash +e {0}
+      run: |
+        _jq_bin="$(which jq)"
+        if [ -f "${_jq_bin}" ]; then
+          echo "found=true" >> $GITHUB_OUTPUT
+        else
+          echo "found=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: 'Install jq - Unix-ish'
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
+      shell: bash
+      env:
+        JQ_VERSION: '${{ inputs.version }}'
+      run: $GITHUB_ACTION_PATH/scripts/unixish.sh
+
+    - name: 'Check for jq - Windows-ish'
+      id: jq-check-windows
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        if (Get-Command "jq.exe" -ErrorAction SilentlyContinue)
+        {
+            Add-Content $Env:GITHUB_OUTPUT "found=true"
+        }
+        else
+        {
+            Add-Content $Env:GITHUB_OUTPUT "found=false"
+        }
+
+    - name: 'Install jq - Windows-ish'
+      if: runner.os == 'Windows' && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+      shell: powershell
+      env:
+        DL_COMPRESSED: "${{ inputs.download-compressed == 'true' }}"
+        JQ_VERSION: '${{ inputs.version }}'
+      run: '& $Env:GITHUB_ACTION_PATH\scripts\windowsish.ps1'
