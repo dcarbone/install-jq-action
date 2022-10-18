@@ -64,6 +64,5 @@ runs:
       if: runner.os == 'Windows' && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
-        DL_COMPRESSED: "${{ inputs.download-compressed == 'true' }}"
         JQ_VERSION: '${{ inputs.version }}'
       run: '& $Env:GITHUB_ACTION_PATH\scripts\windowsish.ps1'

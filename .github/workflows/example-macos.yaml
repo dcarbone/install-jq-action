@@ -8,11 +8,6 @@ on:
         required: false
         description: "Version of jq to install"
         default: "1.6"
-      download-compressed:
-        type: boolean
-        required: false
-        description: "Download .tar.gz of binary rather than raw binary.  Save the tubes."
-        default: true
       force:
         type: boolean
         required: false
@@ -27,7 +22,6 @@ jobs:
         uses: dcarbone/install-jq-action@v1.0.0
         with:
           version: '${{ inputs.version }}'
-          download-compressed: '${{ inputs.download-compressed }}'
           force: '${{ inputs.force }}'
 
       - name: 'Check jq'

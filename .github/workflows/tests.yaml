@@ -30,13 +30,10 @@ jobs:
           - "windows-latest"
           - "windows-2022"
           - "windows-2019"
-        download-compressed:
-          - 'true'
-          - 'false'
         force:
           - 'true'
           - 'false'
-    name: "Test Action - (img: ${{ matrix.image }}; dlcmp: ${{ matrix.download-compressed }}; force: ${{ matrix.force }})"
+    name: "Test Action - (img: ${{ matrix.image }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
       - uses: actions/checkout@v3.1.0
@@ -46,7 +43,6 @@ jobs:
         uses: dcarbone/install-jq-action@main
         with:
           force: '${{ matrix.force }}'
-          download-compressed: '${{ matrix.download-compressed }}'
 
       - name: Check jq - Unix-ish
         if: runner.os == 'Linux' || runner.os == 'macOS'
