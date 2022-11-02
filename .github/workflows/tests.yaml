@@ -33,7 +33,10 @@ jobs:
         force:
           - 'true'
           - 'false'
-    name: "Test Action - (img: ${{ matrix.image }}; force: ${{ matrix.force }})"
+        version:
+          - '1.5'
+          - '1.6'
+    name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
       - uses: actions/checkout@v3.1.0
@@ -42,13 +45,29 @@ jobs:
         id: install-jq
         uses: dcarbone/install-jq-action@main
         with:
+          version: '${{ matrix.version }}'
           force: '${{ matrix.force }}'
 
       - name: Check jq - Unix-ish
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+        if: (runner.os == 'Linux' || runner.os == 'macOS') && matrix.force == 'true'
+        shell: bash +e {0}
         run: |
-          which jq
-          jq --version
+          _err=
+          _which="$(which jq)"
+          _vers="$(jq --version)"
+          if [[ "${_which}" != "$RUNNER_TOOL_CACHE/jq/jq" ]]; then
+            echo "jq found at unexpected path."
+            echo "  Expected:   \"$RUNNER_TOOL_CACHE/jq/jq\""
+            echo "  Actual:     \"${_which}\""
+            _err=1
+          fi
+          if [[ "${_vers}" != 'jq-${{ matrix.version }}' ]]; then
+            echo "jq --version returned unexpected value"
+            echo '  Expected:   "jq-${{ matrix.version }}"'
+            echo "  Actual:     \"${_vers}\""
+            _err=1
+          fi
+          if [ -n "${_err}" ]; then exit 1; fi;
 
       - name: Check Outputs - Unix-ish
         if: runner.os == 'Linux' || runner.os == 'macOS'
@@ -87,10 +106,18 @@ jobs:
           
 
       - name: Check jq - Windows-ish
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && matrix.force == 'true'
         run: |
           Get-Command "jq.exe"
-          jq.exe --version
+          $_cmd={jq.exe --version }
+          $_vers=jq.exe --version 2>&1
+          if ( "${_vers}" -ne "jq-${{ matrix.version }}" )
+          {
+              Write-Host "jq.exe --version returned unexpected value"
+              Write-Host "  Expected:   jq-${{ matrix.version }}"
+              Write-Host "  Actual:     ${_vers}"
+              exit 1
+          }
 
       - name: Check Outputs - Windows-ish
         if: runner.os == 'Windows'
