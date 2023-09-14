@@ -10,7 +10,7 @@ inputs:
   version:
     required: false
     description: "Version of jq to install"
-    default: "1.6"
+    default: "1.7"
   force:
     required: false
     description: "If 'true', does not check for existing jq installation before continuing."
@@ -31,6 +31,7 @@ runs:
       id: jq-check-unix
       if: (runner.os == 'Linux' || runner.os == 'macOS')
       shell: bash +e {0}
+      # language=sh
       run: |
         _jq_bin="$(which jq)"
         if [ -f "${_jq_bin}" ]; then
@@ -44,12 +45,19 @@ runs:
       shell: bash
       env:
         JQ_VERSION: '${{ inputs.version }}'
-      run: $GITHUB_ACTION_PATH/scripts/unixish.sh
+      # language=sh
+      run: |
+        if [[ '${{ inputs.version }}' == '1.5' ]] || [[ '${{ inputs.version }}' == '1.6' ]]; then
+          $GITHUB_ACTION_PATH/scripts/unixish.sh
+        else
+          $GITHUB_ACTION_PATH/scripts/unixish-17.sh
+        fi
 
     - name: 'Check for jq - Windows-ish'
       id: jq-check-windows
       if: runner.os == 'Windows'
       shell: powershell
+      # language=powershell
       run: |
         if (Get-Command "jq.exe" -ErrorAction SilentlyContinue)
         {
@@ -65,4 +73,13 @@ runs:
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
-      run: '& $Env:GITHUB_ACTION_PATH\scripts\windowsish.ps1'
+      # language=powershell
+      run: |
+        if ( "${{ inputs.version }}" -eq "1.5" -or "${{ inputs.version }}" -eq "1.6")
+        {
+          '& $Env:GITHUB_ACTION_PATH\scripts\windowsish.ps1'
+        }
+        else
+        {
+          '& $Env:GITHUB_ACTION_PATH\scripts\windowsish-17.ps1'
+        }

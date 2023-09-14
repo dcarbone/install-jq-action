@@ -6,12 +6,12 @@ on:
       version:
         type: string
         required: false
-        description: "Version of jq to install"
-        default: "1.6"
+        description: 'Version of jq to install'
+        default: '1.7'
       force:
         type: boolean
         required: false
-        description: "Do not check for existing jq installation before continuing."
+        description: 'Do not check for existing jq installation before continuing.'
         default: false
 
 jobs:
@@ -19,12 +19,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: 'Setup jq'
-        uses: dcarbone/install-jq-action@v1.0.1
+        uses: dcarbone/install-jq-action@v2.0.0
         with:
           version: '${{ inputs.version }}'
           force: '${{ inputs.force }}'
 
       - name: 'Check jq'
+        # language=sh
         run: |
           which jq
           jq --version

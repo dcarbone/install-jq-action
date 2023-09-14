@@ -21,13 +21,11 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu-latest"
-          - "ubuntu-20.04"
           - "ubuntu-22.04"
-          - "macos-latest"
+          - "ubuntu-20.04"
+          - "macos-13"
           - "macos-11"
           - "macos-12"
-          - "windows-latest"
           - "windows-2022"
           - "windows-2019"
         force:
@@ -36,6 +34,7 @@ jobs:
         version:
           - '1.5'
           - '1.6'
+          - '1.7'
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
@@ -50,7 +49,7 @@ jobs:
 
       - name: Check jq - Unix-ish
         if: (runner.os == 'Linux' || runner.os == 'macOS') && matrix.force == 'true'
-        shell: bash +e {0}
+        # language=sh
         run: |
           _err=
           _which="$(which jq)"
@@ -71,7 +70,7 @@ jobs:
 
       - name: Check Outputs - Unix-ish
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        shell: bash -e {0}
+        # language=sh
         run: |
           _installed='${{ steps.install-jq.outputs.installed }}'
           _err=
@@ -107,11 +106,12 @@ jobs:
 
       - name: Check jq - Windows-ish
         if: runner.os == 'Windows' && matrix.force == 'true'
+        # language=powershell
         run: |
           Get-Command "jq.exe"
           $_cmd={jq.exe --version }
           $_vers=jq.exe --version 2>&1
-          if ( "${_vers}" -ne "jq-${{ matrix.version }}" )
+          if ( "${_vers}" -ne "jq-${{ matrix.version }}" -and "${_vers}" -ne "jq-${{ matrix.version }}-dirty" )
           {
               Write-Host "jq.exe --version returned unexpected value"
               Write-Host "  Expected:   jq-${{ matrix.version }}"
@@ -122,6 +122,7 @@ jobs:
       - name: Check Outputs - Windows-ish
         if: runner.os == 'Windows'
         shell: powershell
+        # language=powershell
         run: |
           $ErrorActionPreference = 'Stop'
           Set-StrictMode -Version Latest
