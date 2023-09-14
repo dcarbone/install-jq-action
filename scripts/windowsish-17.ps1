@@ -5,7 +5,7 @@ Write-Host "::group::Prep"
 
 $_base_url = "https://github.com/jqlang/jq/releases/download"
 
-$_arch_env = ($Env::RUNNER_ARCH).ToLower()
+$_arch_env = ($Env:RUNNER_ARCH).ToLower()
 
 # validate input and prepare some vars
 
