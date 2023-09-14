@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Setup jq'
-        uses: dcarbone/install-jq-action@v2.0.0
+        uses: dcarbone/install-jq-action@v2.0.1
         with:
           version: '${{ inputs.version }}'
           force: '${{ inputs.force }}'
