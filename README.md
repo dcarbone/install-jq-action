@@ -3,7 +3,11 @@ Multiplatform [jq](https://github.com/stedolan/jq) installer action
 
 [![Tests - Setup jq Action](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml/badge.svg)](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml)
 
-This action cannot currently handle MacOS arm64 runners.
+This action is tested against the following versions of JQ:
+
+- [1.7](https://github.com/jqlang/jq/releases/tag/jq-1.7)
+- [1.6](https://github.com/jqlang/jq/releases/tag/jq-1.6)
+- [1.5](https://github.com/jqlang/jq/releases/tag/jq-1.5)
 
 # Index
 
@@ -16,6 +20,7 @@ This action cannot currently handle MacOS arm64 runners.
 
 * [linux](./.github/workflows/example-linux.yaml)
 * [macos](./.github/workflows/example-macos.yaml)
+* [windows](./.github/workflows/example-windows.yaml)
 
 ## Action Inputs
 
@@ -24,7 +29,7 @@ This action cannot currently handle MacOS arm64 runners.
   version:
     required: false
     description: "Version of jq to install"
-    default: "1.6"
+    default: "1.7"
 ```
 
 This must be a version with a [corresponding release](https://github.com/stedolan/jq/releases).
