@@ -54,7 +54,7 @@ Move-Item -Force -LiteralPath "$Env:RUNNER_TEMP\${_bin_name}" -Destination "$Env
 
 Write-Host "Adding $Env:RUNNER_TOOL_CACHE\jq\ to path..."
 $(
-    "$Env:RUNNER_TOOL_CACHE\jq\"
+    "$Env:RUNNER_TOOL_CACHE\jq\" -Raw
     Get-Content "$Env:GITHUB_PATH" -Raw
 ) | Set-Content "$Env:GITHUB_PATH"
 
