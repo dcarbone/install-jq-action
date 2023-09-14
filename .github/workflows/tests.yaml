@@ -38,7 +38,7 @@ jobs:
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
-      - uses: actions/checkout@v3.1.0
+      - uses: actions/checkout@v4
 
       - name: Setup jq
         id: install-jq
