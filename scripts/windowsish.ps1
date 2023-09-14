@@ -40,12 +40,6 @@ Invoke-WebRequest -Uri "${_dl_url}" -OutFile "${_dl_path}"
 
 Write-Host "::endgroup::"
 
-Write-Host "::group::Running choco uninstall jq"
-
-choco uninstall jq
-
-Write-Host "::endgroup::"
-
 # install into tool cache
 
 Write-Host "::group::Copying to tool cache"
@@ -59,9 +53,6 @@ Write-Host "Dst: $Env:RUNNER_TOOL_CACHE\jq\jq.exe"
 Move-Item -Force -LiteralPath "$Env:RUNNER_TEMP\${_bin_name}" -Destination "$Env:RUNNER_TOOL_CACHE\jq\jq.exe"
 
 Write-Host "Adding $Env:RUNNER_TOOL_CACHE\jq\ to path..."
-$(
-    "$Env:RUNNER_TOOL_CACHE\jq\"
-    Get-Content "$Env:GITHUB_PATH" -Raw
-) | Set-Content "$Env:GITHUB_PATH"
+Add-Content "$Env:GITHUB_PATH" "$Env:RUNNER_TOOL_CACHE\jq\"
 
 Write-Host "::endgroup::"
