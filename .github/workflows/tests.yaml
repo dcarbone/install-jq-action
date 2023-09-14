@@ -111,7 +111,7 @@ jobs:
           Get-Command "jq.exe"
           $_cmd={jq.exe --version }
           $_vers=jq.exe --version 2>&1
-          if ( "${_vers}" -ne "jq-${{ matrix.version }}" )
+          if ( "${_vers}" -ne "jq-${{ matrix.version }}" -and "${_vers}" -ne "jq-${{ matrix.version }}-dirty" )
           {
               Write-Host "jq.exe --version returned unexpected value"
               Write-Host "  Expected:   jq-${{ matrix.version }}"
