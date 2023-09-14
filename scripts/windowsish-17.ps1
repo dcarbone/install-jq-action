@@ -34,7 +34,7 @@ switch ($_arch_env)
 }
 
 # build bin name
-$_bin_name = "jq-windows-${_arch}"
+$_bin_name = "jq-windows-${_arch}.exe"
 
 # build download vars
 
