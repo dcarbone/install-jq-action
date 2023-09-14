@@ -40,6 +40,12 @@ Invoke-WebRequest -Uri "${_dl_url}" -OutFile "${_dl_path}"
 
 Write-Host "::endgroup::"
 
+Write-Host "::group::Running choco uninstall jq"
+
+choco uninstall jq
+
+Write-Host "::endgroup::"
+
 # install into tool cache
 
 Write-Host "::group::Copying to tool cache"
