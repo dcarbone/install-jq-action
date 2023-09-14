@@ -36,6 +36,7 @@ jobs:
         version:
           - '1.5'
           - '1.6'
+          - '1.7'
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
@@ -50,7 +51,7 @@ jobs:
 
       - name: Check jq - Unix-ish
         if: (runner.os == 'Linux' || runner.os == 'macOS') && matrix.force == 'true'
-        shell: bash +e {0}
+        # language=sh
         run: |
           _err=
           _which="$(which jq)"
@@ -71,7 +72,7 @@ jobs:
 
       - name: Check Outputs - Unix-ish
         if: runner.os == 'Linux' || runner.os == 'macOS'
-        shell: bash -e {0}
+        # language=sh
         run: |
           _installed='${{ steps.install-jq.outputs.installed }}'
           _err=
@@ -107,6 +108,7 @@ jobs:
 
       - name: Check jq - Windows-ish
         if: runner.os == 'Windows' && matrix.force == 'true'
+        # language=sh
         run: |
           Get-Command "jq.exe"
           $_cmd={jq.exe --version }
@@ -122,6 +124,7 @@ jobs:
       - name: Check Outputs - Windows-ish
         if: runner.os == 'Windows'
         shell: powershell
+        # language=pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           Set-StrictMode -Version Latest
