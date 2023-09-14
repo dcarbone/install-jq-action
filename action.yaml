@@ -68,18 +68,18 @@ runs:
             Add-Content $Env:GITHUB_OUTPUT "found=false"
         }
 
-    - name: 'Install jq - Windows-ish'
-      if: runner.os == 'Windows' && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+    - name: 'Install jq - Windows-ish non-1.7'
+      if: runner.os == 'Windows' && (inputs.version == '1.5' || inputs.version == '1.6')  && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
       # language=powershell
-      run: |
-        if ( "${{ inputs.version }}" -eq "1.5" -or "${{ inputs.version }}" -eq "1.6")
-        {
-          '& $Env:GITHUB_ACTION_PATH\scripts\windowsish.ps1'
-        }
-        else
-        {
-          '& $Env:GITHUB_ACTION_PATH\scripts\windowsish-17.ps1'
-        }
+      run: .\scripts\windowsish.ps1
+
+    - name: 'Install jq - Windows-ish 1.7'
+      if: runner.os == 'Windows' && inputs.version == '1.7' && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+      shell: powershell
+      env:
+        JQ_VERSION: '${{ inputs.version }}'
+      # language=powershell
+      run: .\scripts\windowsish-17.ps1
