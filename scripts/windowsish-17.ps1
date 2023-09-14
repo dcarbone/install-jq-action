@@ -69,6 +69,9 @@ Write-Host "Dst: $Env:RUNNER_TOOL_CACHE\jq\jq.exe"
 Move-Item -Force -LiteralPath "$Env:RUNNER_TEMP\${_bin_name}" -Destination "$Env:RUNNER_TOOL_CACHE\jq\jq.exe"
 
 Write-Host "Adding $Env:RUNNER_TOOL_CACHE\jq\ to path..."
-Add-Content "$Env:GITHUB_PATH" "$Env:RUNNER_TOOL_CACHE\jq\"
+$(
+    "$Env:RUNNER_TOOL_CACHE\jq\"
+    Get-Content "$Env:GITHUB_PATH" -Raw
+) | Set-Content "$Env:GITHUB_PATH"
 
 Write-Host "::endgroup::"
