@@ -31,6 +31,7 @@ runs:
       id: jq-check-unix
       if: (runner.os == 'Linux' || runner.os == 'macOS')
       shell: bash +e {0}
+      # language=sh
       run: |
         _jq_bin="$(which jq)"
         if [ -f "${_jq_bin}" ]; then
@@ -44,6 +45,7 @@ runs:
       shell: bash
       env:
         JQ_VERSION: '${{ inputs.version }}'
+      # language=sh
       run: |
         if [[ '${{ inputs.version }}' == '1.5' ]] || [[ '${{ inputs.version }}' == '1.6' ]]; then
           $GITHUB_ACTION_PATH/scripts/unixish.sh
@@ -55,6 +57,7 @@ runs:
       id: jq-check-windows
       if: runner.os == 'Windows'
       shell: powershell
+      # language=powershell
       run: |
         if (Get-Command "jq.exe" -ErrorAction SilentlyContinue)
         {
@@ -70,6 +73,7 @@ runs:
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
+      # language=powershell
       run: |
         if ( "${{ inputs.version }}" -eq "1.5" -or "${{ inputs.version }}" -eq "1.6")
         {

@@ -21,13 +21,11 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu-latest"
-          - "ubuntu-20.04"
           - "ubuntu-22.04"
-          - "macos-latest"
+          - "ubuntu-20.04"
+          - "macos-13"
           - "macos-11"
           - "macos-12"
-          - "windows-latest"
           - "windows-2022"
           - "windows-2019"
         force:
@@ -108,7 +106,7 @@ jobs:
 
       - name: Check jq - Windows-ish
         if: runner.os == 'Windows' && matrix.force == 'true'
-        # language=sh
+        # language=powershell
         run: |
           Get-Command "jq.exe"
           $_cmd={jq.exe --version }
@@ -124,7 +122,7 @@ jobs:
       - name: Check Outputs - Windows-ish
         if: runner.os == 'Windows'
         shell: powershell
-        # language=pwsh
+        # language=powershell
         run: |
           $ErrorActionPreference = 'Stop'
           Set-StrictMode -Version Latest
