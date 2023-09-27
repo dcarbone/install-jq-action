@@ -44,7 +44,7 @@ jobs:
 
       - name: Setup jq
         id: install-jq
-        uses: dcarbone/install-jq-action@main
+        uses: ./
         with:
           version: '${{ matrix.version }}'
           force: '${{ matrix.force }}'
