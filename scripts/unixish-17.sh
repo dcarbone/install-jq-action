@@ -23,7 +23,7 @@ case $RUNNER_OS in
     _os='linux'
     ;;
   macOS)
-    _os='osx'
+    _os='macos'
     ;;
 
   *)
