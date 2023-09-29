@@ -73,7 +73,7 @@ echo '::group::Downloading jq'
 echo "Src: ${_dl_url}"
 echo "Dst: ${_dl_path}"
 
-wget -O- "${_dl_url}" > "${_dl_path}"
+curl -L "${_dl_url}" -o "${_dl_path}"
 
 echo '::endgroup::'
 
