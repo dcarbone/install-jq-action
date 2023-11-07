@@ -46,7 +46,7 @@ runs:
       env:
         JQ_VERSION: '${{ inputs.version }}'
       # language=sh
-      run: ${{ github.action_path }}/scripts/unixish.sh
+      run: ${GITHUB_ACTION_PATH}/scripts/unixish.sh
 
     - name: 'Install jq - Unix-ish 1.7'
       if: (runner.os == 'Linux' || runner.os == 'macOS') && inputs.version == '1.7' && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
@@ -54,7 +54,7 @@ runs:
       env:
         JQ_VERSION: '${{ inputs.version }}'
       # language=sh
-      run: ${{ github.action_path }}/scripts/unixish-17.sh
+      run: ${GITHUB_ACTION_PATH}/scripts/unixish-17.sh
 
     - name: 'Check for jq - Windows-ish'
       id: jq-check-windows
