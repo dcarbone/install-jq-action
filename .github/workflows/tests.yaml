@@ -23,13 +23,17 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu-22.04"
+          - "macos-latest"
           - "ubuntu-20.04"
+          - "ubuntu-22.04"
+          - "ubuntu-24.04"
+          - "macos-latest"
           - "macos-13"
-          - "macos-11"
-          - "macos-12"
-          - "windows-2022"
+          - "macos-14"
+          - "macos-15"
+          - "windows-latest"
           - "windows-2019"
+          - "windows-2022"
         force:
           - 'true'
           - 'false'
