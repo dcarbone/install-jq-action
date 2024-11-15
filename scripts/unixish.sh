@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 set -e
 
@@ -54,7 +54,7 @@ esac
 
 # determine binary name
 
-if [[ "${_os}" == "linux" ]]; then
+if [ "${_os}" = "linux" ]; then
   case "${_arch}" in
     '386')
       _bin_name="jq-linux32"

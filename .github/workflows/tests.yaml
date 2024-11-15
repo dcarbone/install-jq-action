@@ -42,38 +42,94 @@ jobs:
         include:
           - image: "ubuntu-latest"
             version: '1.6'
+            force: true
+          - image: "ubuntu-latest"
+            version: '1.6'
+            force: false
           - image: "ubuntu-latest"
             version: '1.5'
+            force: true
+          - image: "ubuntu-latest"
+            version: '1.5'
+            force: false
 
           - image: "ubuntu-20.04"
             version: '1.6'
+            force: true
+          - image: "ubuntu-20.04"
+            version: '1.6'
+            force: false
           - image: "ubuntu-20.04"
             version: '1.5'
+            force: true
+          - image: "ubuntu-20.04"
+            version: '1.5'
+            force: false
 
           - image: "ubuntu-22.04"
             version: '1.6'
+            force: true
+          - image: "ubuntu-22.04"
+            version: '1.6'
+            force: false
           - image: "ubuntu-22.04"
             version: '1.5'
+            force: true
+          - image: "ubuntu-22.04"
+            version: '1.5'
+            force: false
 
           - image: "ubuntu-24.04"
             version: '1.6'
+            force: true
+          - image: "ubuntu-24.04"
+            version: '1.6'
+            force: false
           - image: "ubuntu-24.04"
             version: '1.5'
+            force: true
+          - image: "ubuntu-24.04"
+            version: '1.5'
+            force: false
 
           - image: "windows-latest"
             version: '1.6'
+            force: true
+          - image: "windows-latest"
+            version: '1.6'
+            force: false
           - image: "windows-latest"
             version: '1.5'
+            force: true
+          - image: "windows-latest"
+            version: '1.5'
+            force: false
 
           - image: "windows-2019"
             version: '1.6'
+            force: true
+          - image: "windows-2019"
+            version: '1.6'
+            force: false
           - image: "windows-2019"
             version: '1.5'
+            force: true
+          - image: "windows-2019"
+            version: '1.5'
+            force: false
 
           - image: "windows-2022"
             version: '1.6'
+            force: true
+          - image: "windows-2022"
+            version: '1.6'
+            force: false
           - image: "windows-2022"
             version: '1.5'
+            force: true
+          - image: "windows-2022"
+            version: '1.5'
+            force: false
 
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
