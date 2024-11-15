@@ -30,7 +30,7 @@ runs:
     - name: 'Check for jq - Unix-ish'
       id: jq-check-unix
       if: (runner.os == 'Linux' || runner.os == 'macOS')
-      shell: bash +e {0}
+      shell: sh +e {0}
       # language=sh
       run: |
         _jq_bin="$(which jq)"
@@ -42,7 +42,7 @@ runs:
 
     - name: 'Install jq - Unix-ish non-1.7'
       if: (runner.os == 'Linux' || runner.os == 'macOS') && (inputs.version == '1.5' || inputs.version == '1.6') && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
-      shell: bash
+      shell: sh
       env:
         JQ_VERSION: '${{ inputs.version }}'
       # language=sh
@@ -50,7 +50,7 @@ runs:
 
     - name: 'Install jq - Unix-ish 1.7'
       if: (runner.os == 'Linux' || runner.os == 'macOS') && inputs.version == '1.7' && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
-      shell: bash
+      shell: sh
       env:
         JQ_VERSION: '${{ inputs.version }}'
       # language=sh
