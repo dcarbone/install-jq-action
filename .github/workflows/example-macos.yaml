@@ -19,7 +19,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: 'Setup jq'
-        uses: dcarbone/install-jq-action@v2
+        uses: dcarbone/install-jq-action@v3
         with:
           version: '${{ inputs.version }}'
           force: '${{ inputs.force }}'
