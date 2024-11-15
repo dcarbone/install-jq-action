@@ -41,33 +41,40 @@ jobs:
           - '1.7'
         include:
           - image: "ubuntu-latest"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "ubuntu-latest"
+            version: '1.5'
+
           - image: "ubuntu-20.04"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "ubuntu-20.04"
+            version: '1.5'
+
           - image: "ubuntu-22.04"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "ubuntu-22.04"
+            version: '1.5'
+
           - image: "ubuntu-24.04"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "ubuntu-24.04"
+            version: '1.5'
+
           - image: "windows-latest"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "windows-latest"
+            version: '1.5'
+
           - image: "windows-2019"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "windows-2019"
+            version: '1.5'
+
           - image: "windows-2022"
-            version:
-              - '1.6'
-              - '1.5'
+            version: '1.6'
+          - image: "windows-2022"
+            version: '1.5'
+
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
