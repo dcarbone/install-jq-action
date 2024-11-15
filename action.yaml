@@ -30,7 +30,7 @@ runs:
     - name: 'Check for jq - Unix-ish'
       id: jq-check-unix
       if: (runner.os == 'Linux' || runner.os == 'macOS')
-      shell: sh
+      shell: sh +e {0}
       # language=sh
       run: |
         _jq_bin="$(which jq)"
