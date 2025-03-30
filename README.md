@@ -1,7 +1,7 @@
 # install-jq-action
 Multiplatform [jq](https://github.com/stedolan/jq) installer action
 
-[![Tests - Setup jq Action](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml/badge.svg)](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml)
+[![Tests - Install jq Action](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml/badge.svg)](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml)
 
 This action is tested against the following versions of JQ:
 
