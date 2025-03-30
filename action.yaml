@@ -9,8 +9,8 @@ branding:
 inputs:
   version:
     required: false
-    description: "Version of jq to install"
-    default: "1.7"
+    description: "Version of jq to install."
+    default: "1.7.1"
   force:
     required: false
     description: "If 'true', does not check for existing jq installation before continuing."
@@ -41,7 +41,7 @@ runs:
         fi
 
     - name: 'Install jq - Unix-ish non-1.7'
-      if: (runner.os == 'Linux' || runner.os == 'macOS') && (inputs.version == '1.5' || inputs.version == '1.6') && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && (startsWith(inputs.version, '1.5') || startsWith(inputs.version, '1.6')) && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
       shell: sh
       env:
         JQ_VERSION: '${{ inputs.version }}'
@@ -49,7 +49,7 @@ runs:
       run: ${GITHUB_ACTION_PATH}/scripts/unixish.sh
 
     - name: 'Install jq - Unix-ish 1.7'
-      if: (runner.os == 'Linux' || runner.os == 'macOS') && inputs.version == '1.7' && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && startsWith(inputs.version, '1.7') && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
       shell: sh
       env:
         JQ_VERSION: '${{ inputs.version }}'
