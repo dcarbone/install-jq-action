@@ -9,8 +9,8 @@ branding:
 inputs:
   version:
     required: false
-    description: "Version of jq to install"
-    default: "1.7"
+    description: "Version of jq to install."
+    default: "1.7.1"
   force:
     required: false
     description: "If 'true', does not check for existing jq installation before continuing."
