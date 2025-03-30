@@ -24,7 +24,6 @@ jobs:
       matrix:
         image:
           - "ubuntu-latest"
-          - "ubuntu-20.04"
           - "ubuntu-22.04"
           - "ubuntu-24.04"
           - "macos-latest"
@@ -51,19 +50,6 @@ jobs:
             version: '1.5'
             force: true
           - image: "ubuntu-latest"
-            version: '1.5'
-            force: false
-
-          - image: "ubuntu-20.04"
-            version: '1.6'
-            force: true
-          - image: "ubuntu-20.04"
-            version: '1.6'
-            force: false
-          - image: "ubuntu-20.04"
-            version: '1.5'
-            force: true
-          - image: "ubuntu-20.04"
             version: '1.5'
             force: false
 
@@ -270,7 +256,6 @@ jobs:
         image:
           - "ubuntu-24.04"
           - "ubuntu-22.04"
-          - "ubuntu-20.04"
         force:
           - 'true'
           - 'false'
