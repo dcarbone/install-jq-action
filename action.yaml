@@ -72,14 +72,14 @@ runs:
         }
 
     - name: 'Install jq - Windows-ish non-1.7'
-      if: runner.os == 'Windows' && (inputs.version == '1.5' || inputs.version == '1.6') && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+      if: runner.os == 'Windows' && (startsWith(inputs.version, '1.5') || startsWith(inputs.version, '1.6')) && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
       run: ${{ github.action_path }}\scripts\windowsish.ps1
 
     - name: 'Install jq - Windows-ish 1.7'
-      if: runner.os == 'Windows' && inputs.version == '1.7' && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+      if: runner.os == 'Windows' && startsWith(inputs.version, '1.7') && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
