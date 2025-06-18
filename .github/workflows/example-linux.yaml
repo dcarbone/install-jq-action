@@ -7,7 +7,7 @@ on:
         type: string
         required: false
         description: 'Version of jq to install'
-        default: '1.7'
+        default: '1.7.1'
       force:
         type: boolean
         required: false

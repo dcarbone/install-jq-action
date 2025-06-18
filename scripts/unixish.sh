@@ -20,7 +20,7 @@ case $RUNNER_OS in
   [Ll]inux)
     _os='linux'
     ;;
-  macOS)
+  mac[Oo][Ss])
     _os='osx'
     ;;
 
