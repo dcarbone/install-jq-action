@@ -40,7 +40,7 @@ runs:
           echo "found=false" >> $GITHUB_OUTPUT
         fi
 
-    - name: 'Install jq - Unix-ish non-1.7'
+    - name: 'Install jq - Unix-ish sub-1.7'
       if: (runner.os == 'Linux' || runner.os == 'macOS') && (startsWith(inputs.version, '1.5') || startsWith(inputs.version, '1.6')) && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
       shell: sh
       env:
@@ -48,8 +48,8 @@ runs:
       # language=sh
       run: ${GITHUB_ACTION_PATH}/scripts/unixish.sh
 
-    - name: 'Install jq - Unix-ish 1.7'
-      if: (runner.os == 'Linux' || runner.os == 'macOS') && startsWith(inputs.version, '1.7') && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
+    - name: 'Install jq - Unix-ish 1.7+'
+      if: (runner.os == 'Linux' || runner.os == 'macOS') && (startsWith(inputs.version, '1.7') || startsWith(inputs.version, '1.8')) && (steps.jq-check-unix.outputs.found == 'false' || inputs.force == 'true')
       shell: sh
       env:
         JQ_VERSION: '${{ inputs.version }}'
@@ -71,15 +71,15 @@ runs:
             Add-Content $Env:GITHUB_OUTPUT "found=false"
         }
 
-    - name: 'Install jq - Windows-ish non-1.7'
+    - name: 'Install jq - Windows-ish sub-1.7'
       if: runner.os == 'Windows' && (startsWith(inputs.version, '1.5') || startsWith(inputs.version, '1.6')) && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'
       run: ${{ github.action_path }}\scripts\windowsish.ps1
 
-    - name: 'Install jq - Windows-ish 1.7'
-      if: runner.os == 'Windows' && startsWith(inputs.version, '1.7') && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
+    - name: 'Install jq - Windows-ish 1.7+'
+      if: runner.os == 'Windows' && (startsWith(inputs.version, '1.7') || startsWith(inputs.version, '1.8')) && (steps.jq-check-windows.outputs.found == 'false' || inputs.force == 'true')
       shell: powershell
       env:
         JQ_VERSION: '${{ inputs.version }}'

@@ -5,6 +5,7 @@ Multiplatform [jq](https://github.com/stedolan/jq) installer action
 
 This action is tested against the following versions of JQ:
 
+- [1.8.0](https://github.com/jqlang/jq/releases/tag/jq-1.8.0)
 - [1.7.1](https://github.com/jqlang/jq/releases/tag/jq-1.7.1)
 - [1.7](https://github.com/jqlang/jq/releases/tag/jq-1.7)
 - [1.6](https://github.com/jqlang/jq/releases/tag/jq-1.6)
