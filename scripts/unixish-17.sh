@@ -19,7 +19,7 @@ _dl_path=
 _dl_url=
 
 case $RUNNER_OS in
-  Linux)
+  [Ll]inux)
     _os='linux'
     ;;
   macOS)
