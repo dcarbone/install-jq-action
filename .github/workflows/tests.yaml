@@ -23,16 +23,14 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu-latest"
           - "ubuntu-22.04"
           - "ubuntu-24.04"
-          - "macos-latest"
           - "macos-13"
           - "macos-14"
           - "macos-15"
-          - "windows-latest"
-          - "windows-2019"
+          - "macos-26"
           - "windows-2022"
+          - "windows-2025"
         force:
           - 'true'
           - 'false'
@@ -41,19 +39,6 @@ jobs:
           - '1.7.1'
           - '1.8.0'
         include:
-          - image: "ubuntu-latest"
-            version: '1.6'
-            force: true
-          - image: "ubuntu-latest"
-            version: '1.6'
-            force: false
-          - image: "ubuntu-latest"
-            version: '1.5'
-            force: true
-          - image: "ubuntu-latest"
-            version: '1.5'
-            force: false
-
           - image: "ubuntu-22.04"
             version: '1.6'
             force: true
@@ -80,42 +65,29 @@ jobs:
             version: '1.5'
             force: false
 
-          - image: "windows-latest"
+          - image: "windows-2022"
             version: '1.6'
             force: true
-          - image: "windows-latest"
+          - image: "windows-2022"
             version: '1.6'
             force: false
-          - image: "windows-latest"
+          - image: "windows-2022"
             version: '1.5'
             force: true
-          - image: "windows-latest"
+          - image: "windows-2022"
             version: '1.5'
             force: false
 
-          - image: "windows-2019"
+          - image: "windows-2025"
             version: '1.6'
             force: true
-          - image: "windows-2019"
-            version: '1.6'
-            force: false
-          - image: "windows-2019"
-            version: '1.5'
-            force: true
-          - image: "windows-2019"
-            version: '1.5'
-            force: false
-
-          - image: "windows-2022"
-            version: '1.6'
-            force: true
-          - image: "windows-2022"
+          - image: "windows-2025"
             version: '1.6'
             force: false
-          - image: "windows-2022"
+          - image: "windows-2025"
             version: '1.5'
             force: true
-          - image: "windows-2022"
+          - image: "windows-2025"
             version: '1.5'
             force: false
 
@@ -258,7 +230,7 @@ jobs:
           - '1.7.1'
           - '1.8.0'
     name: "Test Action (Container) - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
-    runs-on: ${{ matrix.image }}
+    runs-on: '${{ matrix.image }}'
     container:
       image: node:20
     steps:
