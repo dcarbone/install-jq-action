@@ -1,5 +1,7 @@
 name: "Setup jq Example - Linux"
 
+permissions: none
+
 on:
   workflow_dispatch:
     inputs:
