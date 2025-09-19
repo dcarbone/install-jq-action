@@ -1,22 +1,5 @@
 name: 'Tests - Setup jq Action'
 
-permissions:
-  actions: none
-  attestations: none
-  checks: none
-  contents: read
-  deployments: none
-  id-token: none
-  issues: none
-  models: none
-  discussions: none
-  packages: none
-  pages: none
-  pull-requests: none
-  security-events: none
-  statuses: none
-
-
 on:
   workflow_dispatch:
 
@@ -34,6 +17,26 @@ on:
   pull_request:
     branches:
       - main
+
+permissions:
+  actions: none
+  attestations: none
+  checks: none
+  contents: read
+  deployments: none
+  id-token: none
+  issues: none
+  models: none
+  discussions: none
+  packages: none
+  pages: none
+  pull-requests: none
+  security-events: none
+  statuses: none
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.ref }}'
+  cancel-in-progress: true
 
 jobs:
   test-linux:
