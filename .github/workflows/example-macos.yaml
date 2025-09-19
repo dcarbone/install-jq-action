@@ -1,5 +1,22 @@
 name: "Setup jq Example - MacOS"
 
+# you may need to change this block for your purposes.
+permissions:
+  actions: none
+  attestations: none
+  checks: none
+  contents: none
+  deployments: none
+  id-token: none
+  issues: none
+  models: none
+  discussions: none
+  packages: none
+  pages: none
+  pull-requests: none
+  security-events: none
+  statuses: none
+
 on:
   workflow_dispatch:
     inputs:
