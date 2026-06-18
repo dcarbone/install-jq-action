@@ -56,6 +56,45 @@ Invoke-WebRequest -Uri "${_dl_url}" -OutFile "${_dl_path}"
 
 Write-Host "::endgroup::"
 
+Write-Host "::group::Verifying checksum"
+
+$_sha_url = "${_base_url}/jq-$Env:JQ_VERSION/sha256sum.txt"
+$_sha_path = "$Env:RUNNER_TEMP\jq-$Env:JQ_VERSION.sha256sum.txt"
+
+$_sha_ok = $true
+try {
+    Invoke-WebRequest -Uri "${_sha_url}" -OutFile "${_sha_path}"
+} catch {
+    $_sha_ok = $false
+}
+
+if ($_sha_ok -and (Test-Path -LiteralPath "${_sha_path}")) {
+    $_expected = $null
+    foreach ($_line in Get-Content -LiteralPath "${_sha_path}") {
+        $_parts = $_line -split '\s+'
+        if ($_parts.Length -ge 2 -and $_parts[1] -eq "${_bin_name}") {
+            $_expected = $_parts[0]
+            break
+        }
+    }
+    if (-not $_expected) {
+        Write-Host "Could not find checksum for \"${_bin_name}\" in ${_sha_url}"
+        exit 1
+    }
+    $_actual = (Get-FileHash -Algorithm SHA256 -LiteralPath "${_dl_path}").Hash.ToLower()
+    if ($_expected.ToLower() -ne $_actual) {
+        Write-Host "Checksum verification failed for \"${_bin_name}\""
+        Write-Host "Expected: $_expected"
+        Write-Host "Actual:   $_actual"
+        exit 1
+    }
+    Write-Host "Checksum verified for \"${_bin_name}\""
+} else {
+    Write-Host "WARNING: No sha256sum.txt found at ${_sha_url}; skipping checksum verification."
+}
+
+Write-Host "::endgroup::"
+
 # install into tool cache
 
 Write-Host "::group::Copying to tool cache"

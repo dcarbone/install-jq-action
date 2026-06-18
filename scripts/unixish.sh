@@ -6,6 +6,13 @@ echo '::group::Prep'
 
 # validate input and prepare some vars
 
+case "$JQ_VERSION" in
+  ''|*[!0-9.]*)
+    echo "Invalid JQ_VERSION: \"$JQ_VERSION\". Expected a version string like \"1.6\"."
+    exit 1
+    ;;
+esac
+
 _base_url='https://github.com/stedolan/jq/releases/download'
 
 _os=
@@ -93,7 +100,7 @@ echo '::group::Downloading jq'
 echo "Src: ${_dl_url}"
 echo "Dst: ${_dl_path}"
 
-curl -L "${_dl_url}" -o "${_dl_path}"
+curl -fsSL --retry 3 "${_dl_url}" -o "${_dl_path}"
 
 echo '::endgroup::'
 
