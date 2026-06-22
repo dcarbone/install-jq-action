@@ -3,6 +3,11 @@ Set-StrictMode -Version Latest
 
 Write-Host "::group::Prep"
 
+if (-not ($Env:JQ_VERSION -match '^[0-9]+\.[0-9]+(\.[0-9]+)*$')) {
+    Write-Host "Invalid JQ_VERSION: '$Env:JQ_VERSION'. Expected a version string like '1.7.1'."
+    exit 1
+}
+
 $_base_url = "https://github.com/jqlang/jq/releases/download"
 
 $_arch_env = ($Env:RUNNER_ARCH).ToLower()
@@ -78,17 +83,17 @@ if ($_sha_ok -and (Test-Path -LiteralPath "${_sha_path}")) {
         }
     }
     if (-not $_expected) {
-        Write-Host "Could not find checksum for \"${_bin_name}\" in ${_sha_url}"
+        Write-Host "Could not find checksum for '${_bin_name}' in ${_sha_url}"
         exit 1
     }
     $_actual = (Get-FileHash -Algorithm SHA256 -LiteralPath "${_dl_path}").Hash.ToLower()
     if ($_expected.ToLower() -ne $_actual) {
-        Write-Host "Checksum verification failed for \"${_bin_name}\""
+        Write-Host "Checksum verification failed for '${_bin_name}'"
         Write-Host "Expected: $_expected"
         Write-Host "Actual:   $_actual"
         exit 1
     }
-    Write-Host "Checksum verified for \"${_bin_name}\""
+    Write-Host "Checksum verified for '${_bin_name}'"
 } else {
     Write-Host "WARNING: No sha256sum.txt found at ${_sha_url}; skipping checksum verification."
 }

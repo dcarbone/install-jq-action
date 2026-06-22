@@ -6,12 +6,10 @@ echo '::group::Prep'
 
 # validate input and prepare some vars
 
-case "$JQ_VERSION" in
-  ''|*[!0-9.]*)
-    echo "Invalid JQ_VERSION: \"$JQ_VERSION\". Expected a version string like \"1.6\"."
-    exit 1
-    ;;
-esac
+if ! printf '%s' "$JQ_VERSION" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)*$'; then
+  echo "Invalid JQ_VERSION: \"$JQ_VERSION\". Expected a version string like \"1.6\"."
+  exit 1
+fi
 
 _base_url='https://github.com/stedolan/jq/releases/download'
 

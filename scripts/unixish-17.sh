@@ -6,12 +6,10 @@ echo '::group::Prep'
 
 # validate input and prepare some vars
 
-case "$JQ_VERSION" in
-  ''|*[!0-9.]*)
-    echo "Invalid JQ_VERSION: \"$JQ_VERSION\". Expected a version string like \"1.7.1\"."
-    exit 1
-    ;;
-esac
+if ! printf '%s' "$JQ_VERSION" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)*$'; then
+  echo "Invalid JQ_VERSION: \"$JQ_VERSION\". Expected a version string like \"1.7.1\"."
+  exit 1
+fi
 
 # Portable SHA256 digest: prefer sha256sum (Linux), fall back to shasum
 # (macOS, ships with the OS via Perl), then openssl. Prints only the hex
