@@ -71,6 +71,12 @@ try {
     Invoke-WebRequest -Uri "${_sha_url}" -OutFile "${_sha_path}"
 } catch {
     $_sha_ok = $false
+    if ($_.Exception.Response -and ([int]$_.Exception.Response.StatusCode -eq 404)) {
+        $_sha_ok = $false
+    } else {
+        Write-Host "Failed to download sha256sum.txt from ${_sha_url}"
+        throw
+    }
 }
 
 if ($_sha_ok -and (Test-Path -LiteralPath "${_sha_path}")) {

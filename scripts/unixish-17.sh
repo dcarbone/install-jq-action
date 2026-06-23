@@ -102,7 +102,8 @@ echo '::group::Verifying checksum'
 _sha_url="${_base_url}/jq-$JQ_VERSION/sha256sum.txt"
 _sha_path="$RUNNER_TEMP/jq-$JQ_VERSION.sha256sum.txt"
 
-if curl -fsSL --retry 3 "${_sha_url}" -o "${_sha_path}"; then
+_sha_http_code="$(curl -sSL -o "${_sha_path}" -w '%{http_code}' --retry 3 "${_sha_url}" || true)"
+if [ "${_sha_http_code}" = '200' ]; then
   _expected="$(grep -E " ${_bin_name}\$" "${_sha_path}" | head -n1 | awk '{print $1}' || true)"
   if [ -z "${_expected}" ]; then
     echo "Could not find checksum for \"${_bin_name}\" in ${_sha_url}"
@@ -119,8 +120,11 @@ if curl -fsSL --retry 3 "${_sha_url}" -o "${_sha_path}"; then
     exit 1
   fi
   echo "Checksum verified for \"${_bin_name}\""
-else
+elif [ "${_sha_http_code}" = '404' ]; then
   echo "WARNING: No sha256sum.txt found at ${_sha_url}; skipping checksum verification."
+else
+  echo "Failed to download sha256sum.txt from ${_sha_url} (HTTP ${_sha_http_code})"
+  exit 1
 fi
 
 echo '::endgroup::'
