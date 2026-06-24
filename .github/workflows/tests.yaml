@@ -111,7 +111,7 @@ jobs:
     name: "Test Action - (img: ${{ matrix.image }}; version: ${{ matrix.version }}; force: ${{ matrix.force }})"
     runs-on: ${{ matrix.image }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup jq
         id: install-jq
@@ -251,7 +251,7 @@ jobs:
     container:
       image: node:24
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup jq
         id: install-jq
@@ -328,11 +328,12 @@ jobs:
             script: "scripts/windowsish-17.ps1"
     runs-on: ${{ matrix.image }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Reject invalid version - Unix-ish
         if: runner.os != 'Windows'
         shell: sh
+        # language=sh
         run: |
           _failed=0
           for _bad_ver in '' '.' '..' '1' '1.' '.7' '1..7' '1.7.' 'abc' '1.6-dirty' '../../etc/passwd' '-n'; do
@@ -352,6 +353,7 @@ jobs:
       - name: Reject invalid version - Windows-ish
         if: runner.os == 'Windows'
         shell: powershell
+        # language=powershell
         run: |
           $failed = $false
           $badVersions = @('', '.', '..', '1', '1.', '.7', '1..7', '1.7.', 'abc', '1.6-dirty', '../../etc/passwd', '-n')
@@ -384,10 +386,12 @@ jobs:
           - macos-26
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Version validation tests
+        # language=sh
         run: sh tests/unit/test-version-validation.sh
 
       - name: Arch mapping tests
+        # language=sh
         run: sh tests/unit/test-arch-mapping.sh
