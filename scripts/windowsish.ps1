@@ -3,6 +3,11 @@ Set-StrictMode -Version Latest
 
 Write-Host "::group::Prep"
 
+if (-not ($Env:JQ_VERSION -match '^[0-9]+\.[0-9]+(\.[0-9]+)*$')) {
+    Write-Host "Invalid JQ_VERSION: '$Env:JQ_VERSION'. Expected a version string like '1.6'."
+    exit 1
+}
+
 # validate input and prepare some vars
 
 switch ($Env:RUNNER_ARCH)
