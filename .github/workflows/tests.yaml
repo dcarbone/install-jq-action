@@ -9,10 +9,7 @@ on:
     paths:
       - 'action.yaml'
       - '.github/workflows/tests.yaml'
-      - 'scripts/unixish.sh'
-      - 'scripts/unixish-17.sh'
-      - 'scripts/windowsish.ps1'
-      - 'scripts/windowsish-17.ps1'
+      - 'scripts/**'
       - 'tests/unit/**'
 
   pull_request:
@@ -373,3 +370,23 @@ jobs:
               }
           }
           if ($failed) { exit 1 }
+
+  unit-tests:
+    name: "Unit Tests (sh) - ${{ matrix.os }}"
+    strategy:
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
+          - macos-14
+          - macos-15
+          - macos-26
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Version validation tests
+        run: sh tests/unit/test-version-validation.sh
+
+      - name: Arch mapping tests
+        run: sh tests/unit/test-arch-mapping.sh
