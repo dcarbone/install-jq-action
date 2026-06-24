@@ -370,6 +370,7 @@ jobs:
               }
           }
           if ($failed) { exit 1 }
+          exit 0
 
   unit-tests:
     name: "Unit Tests (sh) - ${{ matrix.os }}"
