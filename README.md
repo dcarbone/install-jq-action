@@ -6,6 +6,8 @@ Multiplatform [jq](https://github.com/jqlang/jq) installer action
 This action is tested against the following versions of jq:
 
 **Modern releases (jqlang/jq — 1.7+)**
+- [1.8.2](https://github.com/jqlang/jq/releases/tag/jq-1.8.2)
+- [1.8.1](https://github.com/jqlang/jq/releases/tag/jq-1.8.1)
 - [1.8.0](https://github.com/jqlang/jq/releases/tag/jq-1.8.0)
 - [1.7.1](https://github.com/jqlang/jq/releases/tag/jq-1.7.1)
 - [1.7](https://github.com/jqlang/jq/releases/tag/jq-1.7)
@@ -35,7 +37,7 @@ This action is tested against the following versions of jq:
   version:
     required: false
     description: "Version of jq to install"
-    default: "1.7.1"
+    default: "1.8.2"
 ```
 
 Must be a dot-separated numeric version string (e.g. `1.7.1`, `1.8.0`).
