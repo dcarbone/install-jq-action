@@ -1,4 +1,4 @@
-name: "Setup jq Example - Linux"
+name: "Setup jq Example - Windows"
 
 # you may need to change this block for your purposes.
 permissions:
@@ -36,7 +36,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: 'Setup jq'
-        uses: dcarbone/install-jq-action@v3
+        uses: dcarbone/install-jq-action@v4
         with:
           version: '${{ inputs.version }}'
           force: '${{ inputs.force }}'

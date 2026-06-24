@@ -1,15 +1,18 @@
 # install-jq-action
-Multiplatform [jq](https://github.com/stedolan/jq) installer action
+Multiplatform [jq](https://github.com/jqlang/jq) installer action
 
 [![Tests - Install jq Action](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml/badge.svg)](https://github.com/dcarbone/install-jq-action/actions/workflows/tests.yaml)
 
-This action is tested against the following versions of JQ:
+This action is tested against the following versions of jq:
 
+**Modern releases (jqlang/jq — 1.7+)**
 - [1.8.0](https://github.com/jqlang/jq/releases/tag/jq-1.8.0)
 - [1.7.1](https://github.com/jqlang/jq/releases/tag/jq-1.7.1)
 - [1.7](https://github.com/jqlang/jq/releases/tag/jq-1.7)
-- [1.6](https://github.com/jqlang/jq/releases/tag/jq-1.6)
-- [1.5](https://github.com/jqlang/jq/releases/tag/jq-1.5)
+
+**Legacy releases (stedolan/jq — 1.5 and 1.6)**
+- [1.6](https://github.com/stedolan/jq/releases/tag/jq-1.6)
+- [1.5](https://github.com/stedolan/jq/releases/tag/jq-1.5)
 
 # Index
 
@@ -17,6 +20,7 @@ This action is tested against the following versions of JQ:
 2. [Action Source](action.yaml)
 3. [Action Inputs](#action-inputs)
 4. [Action Outputs](#action-outputs)
+5. [Security](#security)
 
 ## Examples
 
@@ -34,7 +38,12 @@ This action is tested against the following versions of JQ:
     default: "1.7.1"
 ```
 
-This must be a version with a [corresponding release](https://github.com/stedolan/jq/releases).
+Must be a dot-separated numeric version string (e.g. `1.7.1`, `1.8.0`).
+
+- **1.7 and newer** are downloaded from the [jqlang/jq](https://github.com/jqlang/jq/releases) repository and
+  support a wider set of architectures: `amd64`, `arm64`, `armhf`, `armel`, and `i386`.
+- **1.5 and 1.6** are downloaded from the legacy [stedolan/jq](https://github.com/stedolan/jq/releases) repository
+  and support `linux32`, `linux64`, and `osx-amd64`.
 
 #### force
 ```yaml
@@ -48,7 +57,7 @@ GitHub's own hosted runners come with a version of
 [jq pre-installed](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#preinstalled-software).
 
 Setting this to `true` will install the version you specify into the tool cache, superseding the preinstalled version.
-Setting this to true can also help ensure the same version is used across both self-hosted and remote runners. 
+Setting this to `true` can also help ensure the same version is used across both self-hosted and remote runners.
 
 ## Action Outputs
 
@@ -63,3 +72,19 @@ Setting this to true can also help ensure the same version is used across both s
   installed:
     description: "If 'true', jq was installed by this action"
 ```
+
+## Security
+
+Starting with v4 this action performs integrity verification on every download:
+
+- **jq 1.7 and newer**: the binary's SHA-256 digest is checked against the release's `sha256sum.txt` before it is
+  installed. The install fails if the digest does not match. If no `sha256sum.txt` is published for a release
+  (e.g. the original jq 1.7.0 tag) a warning is printed and installation continues.
+- **jq 1.5 / 1.6 (legacy)**: no checksum file is published by the upstream `stedolan/jq` project, so no
+  verification is performed.
+
+`curl` is hardened with `--fail` so that HTTP error responses (4xx/5xx) abort the download rather than writing
+the error page to disk as the binary.
+
+All four install scripts validate the `version` input against the pattern `^[0-9]+\.[0-9]+(\.[0-9]+)*$` and
+reject malformed values (including path-traversal attempts) before constructing any download URL.

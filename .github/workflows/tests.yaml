@@ -13,6 +13,7 @@ on:
       - 'scripts/unixish-17.sh'
       - 'scripts/windowsish.ps1'
       - 'scripts/windowsish-17.ps1'
+      - 'tests/unit/**'
 
   pull_request:
     branches:
@@ -310,3 +311,65 @@ jobs:
               fi
             fi
           fi
+
+  test-invalid-version:
+    name: "Test Invalid Version Rejection - ${{ matrix.image }}"
+    strategy:
+      matrix:
+        include:
+          - image: "ubuntu-24.04"
+            script: "scripts/unixish.sh"
+          - image: "ubuntu-24.04"
+            script: "scripts/unixish-17.sh"
+          - image: "macos-15"
+            script: "scripts/unixish.sh"
+          - image: "macos-15"
+            script: "scripts/unixish-17.sh"
+          - image: "windows-2025"
+            script: "scripts/windowsish.ps1"
+          - image: "windows-2025"
+            script: "scripts/windowsish-17.ps1"
+    runs-on: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Reject invalid version - Unix-ish
+        if: runner.os != 'Windows'
+        shell: sh
+        run: |
+          _failed=0
+          for _bad_ver in '' '.' '..' '1' '1.' '.7' '1..7' '1.7.' 'abc' '1.6-dirty' '../../etc/passwd' '-n'; do
+            JQ_VERSION="${_bad_ver}" \
+            RUNNER_OS='Linux' \
+            RUNNER_ARCH='X64' \
+            RUNNER_TEMP='/tmp' \
+            RUNNER_TOOL_CACHE='/tmp/tool-cache' \
+            GITHUB_PATH='/tmp/github-path' \
+              sh ${{ matrix.script }} 2>&1 && {
+                echo "FAIL: script accepted invalid version '${_bad_ver}'"
+                _failed=1
+              } || echo "PASS: script rejected invalid version '${_bad_ver}'"
+          done
+          [ "${_failed}" -eq 0 ]
+
+      - name: Reject invalid version - Windows-ish
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $failed = $false
+          $badVersions = @('', '.', '..', '1', '1.', '.7', '1..7', '1.7.', 'abc', '1.6-dirty', '../../etc/passwd', '-n')
+          foreach ($ver in $badVersions) {
+              $env:JQ_VERSION       = $ver
+              $env:RUNNER_ARCH      = 'X64'
+              $env:RUNNER_TEMP      = $env:TEMP
+              $env:RUNNER_TOOL_CACHE = $env:TEMP
+              $env:GITHUB_PATH      = "$env:TEMP\github-path.txt"
+              & powershell -NonInteractive -File ${{ matrix.script }} 2>&1 | Out-Null
+              if ($LASTEXITCODE -eq 0) {
+                  Write-Host "FAIL: script accepted invalid version '$ver'"
+                  $failed = $true
+              } else {
+                  Write-Host "PASS: script rejected invalid version '$ver'"
+              }
+          }
+          if ($failed) { exit 1 }
